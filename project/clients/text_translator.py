@@ -11,3 +11,18 @@ class TextTranslatorClient(APIClient):
 
     def extract(self, data: dict) -> str:
         return data.get('data').get('translatedText')
+
+    async def get_translation(self, text: str, target_language: str) -> dict[str, str]:
+        data: dict = {
+            "source_language": "en",
+            "target_language": target_language,
+            "text": text,
+        }
+
+        response = await self.client.post(
+            self.url + 'translate',
+            data=data,
+            headers=self.headers,
+        )
+
+        return await response.json()

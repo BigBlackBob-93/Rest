@@ -11,3 +11,20 @@ class JokeGeneratorClient(APIClient):
 
     def extract(self, data: dict) -> str:
         return data.get('value')
+
+    async def get_categories(self) -> list[str]:
+        response = await self.client.get(
+            self.url + 'categories',
+            headers=self.headers,
+        )
+
+        return await response.json()
+
+    async def get_joke(self, category: str) -> dict[str, str]:
+        response = await self.client.get(
+            self.url + 'random',
+            headers=self.headers,
+            params={"category": category},
+        )
+
+        return await response.json()
